@@ -2,7 +2,7 @@ const sequelizePaginate = require('sequelize-paginate')
 
 module.exports = (sequelize, DataTypes) => {
     const Post = sequelize.define('post', {
-        id: {
+        id_post: {
           type: DataTypes.INTEGER,
           primaryKey: true,
           autoIncrement: true
