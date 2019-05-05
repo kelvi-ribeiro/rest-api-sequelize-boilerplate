@@ -5,7 +5,7 @@ module.exports = (app, db) => {
   app.get(`${base_url}`, (req, res) => {        
     const { Op } = db.Sequelize
     const options = {
-      attributes: ['id', 'title'],
+      attributes: ['id_post', 'title'],
       include: [{
         model: db.author,
         as: 'author', // specifies how we want to be able to access our joined rows on the returned data,
@@ -23,11 +23,12 @@ module.exports = (app, db) => {
     db.post.findByPk(req.params.id).then((result) => res.json(result))
   );
 
-  app.post(`${base_url}`, (req, res) =>
+  app.post(`${base_url}`, (req, res, next) =>
     db.post.create({
       title: req.body.title,
       content: req.body.content
     }).then((result) => res.json(result))
+    
   );
 
   app.put(`${base_url}/:id`, (req, res) =>
