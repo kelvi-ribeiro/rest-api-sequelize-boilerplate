@@ -1,4 +1,4 @@
-# rest-api-sequelize-demo
+# rest-api-sequelize-boilerplate
 
 > Api de exemplo do uso do Sequelize + Express
 
