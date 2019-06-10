@@ -38,7 +38,7 @@ module.exports = (app, db) => {
     },
       {
         where: {
-          id: req.params.id
+          id_post: req.params.id
         }
       }).then((result) => res.json(result))
   );
