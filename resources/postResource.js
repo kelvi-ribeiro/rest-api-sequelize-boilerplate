@@ -1,4 +1,5 @@
 const base_url = '/posts'
+const handleError = require('../helpers/HandleError')
 
 module.exports = (app, db) => {  
 
@@ -20,7 +21,13 @@ module.exports = (app, db) => {
   });
 
   app.get(`${base_url}/:id`, (req, res) =>
-    db.post.findByPk(req.params.id).then((result) => res.json(result))
+    db.post.findByPk(req.params.id).then((result) => {
+      if(result){
+        res.json(result)
+      }else{
+        return handleError.notFoundError(res,req.params.id)
+      }
+    })
   );
 
   app.post(`${base_url}`, (req, res, next) =>
@@ -31,23 +38,35 @@ module.exports = (app, db) => {
     
   );
 
-  app.put(`${base_url}/:id`, (req, res) =>
-    db.post.update({
-      title: req.body.title,
-      content: req.body.content
-    },
-      {
-        where: {
-          id_post: req.params.id
+  app.put(`${base_url}/:id`, (req, res) => {
+    db.post.findByPk(req.params.id).then(result => {
+      if(result){
+        db.post.update({
+          title: req.body.title,
+          content: req.body.content
+        },
+          {
+            where: {
+              id_post: req.params.id
+            }
+          }).then((result) => res.json(result))
+        }else{        
+          return handleError.notFoundError(res,req.params.id)
         }
-      }).then((result) => res.json(result))
-  );
+    })    
+  })
 
-  app.delete(`${base_url}/:id`, (req, res) =>
-    db.post.destroy({
-      where: {
-        id_post: req.params.id
+  app.delete(`${base_url}/:id`, (req, res) => {
+    db.post.findByPk(req.params.id).then(result => {
+      if(result){
+        db.post.destroy({
+          where: {
+            id_post: req.params.id
+          }
+        }).then((result) => res.json(result))
+      }else{        
+        return handleError.notFoundError(res,req.params.id)
       }
-    }).then((result) => res.json(result))
-  );
+    })
+  });
 }
