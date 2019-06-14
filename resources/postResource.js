@@ -46,7 +46,7 @@ module.exports = (app, db) => {
   app.delete(`${base_url}/:id`, (req, res) =>
     db.post.destroy({
       where: {
-        id: req.params.id
+        id_post: req.params.id
       }
     }).then((result) => res.json(result))
   );
